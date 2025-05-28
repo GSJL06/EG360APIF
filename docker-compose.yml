@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: educagestor-postgres
+    environment:
+      POSTGRES_DB: educagestor_db
+      POSTGRES_USER: educagestor_user
+      POSTGRES_PASSWORD: educagestor_pass
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - educagestor-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U educagestor_user -d educagestor_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # EducaGestor360 API
+  educagestor-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: educagestor-api
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: educagestor_db
+      DB_USERNAME: educagestor_user
+      DB_PASSWORD: educagestor_pass
+      JWT_SECRET: mySecretKey123456789012345678901234567890
+    ports:
+      - "8080:8080"
+    networks:
+      - educagestor-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # pgAdmin (Optional - for database management)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: educagestor-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@educagestor360.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - educagestor-network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    profiles:
+      - tools
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  educagestor-network:
+    driver: bridge
