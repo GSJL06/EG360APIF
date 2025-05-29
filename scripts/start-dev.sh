@@ -21,22 +21,14 @@ if ! command -v mvn &> /dev/null; then
     exit 1
 fi
 mvn -version
-
+ 
 echo
-echo "Checking PostgreSQL connection..."
-if command -v psql &> /dev/null; then
-    if psql -h localhost -U postgres -d postgres -c "SELECT version();" &> /dev/null; then
-        echo "PostgreSQL connection successful"
-    else
-        echo "WARNING: Cannot connect to PostgreSQL"
-        echo "Please ensure PostgreSQL is running on localhost:5432"
-        echo "You can continue if you have configured a different database"
-    fi
-else
-    echo "WARNING: psql command not found"
-    echo "Please ensure PostgreSQL is installed and running"
-fi
-
+echo "Checking Database connection (MySQL/SQL Server)..."
+echo "Please ensure your chosen database (MySQL or SQL Server) is running and accessible."
+echo "Configure connection details in application.yml and activate the correct profile (mysql or sqlserver)."
+echo "For example, run with: mvn spring-boot:run -Dspring.profiles.active=mysql"
+echo
+ 
 echo
 echo "Building the application..."
 if ! mvn clean compile; then

@@ -22,17 +22,14 @@ if %errorlevel% neq 0 (
     pause
     exit /b 1
 )
-
+ 
 echo.
-echo Checking PostgreSQL connection...
-psql -h localhost -U postgres -d postgres -c "SELECT version();" 2>nul
-if %errorlevel% neq 0 (
-    echo WARNING: Cannot connect to PostgreSQL
-    echo Please ensure PostgreSQL is running on localhost:5432
-    echo You can continue if you have configured a different database
-    echo.
-)
-
+echo Checking Database connection (MySQL/SQL Server)...
+echo Please ensure your chosen database (MySQL or SQL Server) is running and accessible.
+echo Configure connection details in application.yml and activate the correct profile (mysql or sqlserver).
+echo For example, run with: mvn spring-boot:run -Dspring.profiles.active=mysql
+echo.
+ 
 echo.
 echo Building the application...
 mvn clean compile

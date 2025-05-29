@@ -88,9 +88,9 @@ echo "- Swagger UI: http://localhost:8080/swagger-ui.html"
 echo "- API Docs: http://localhost:8080/api-docs"
 echo "- Health Check: http://localhost:8080/api/actuator/health"
 echo
-echo "Database:"
-echo "- PostgreSQL: localhost:5432"
-echo "- pgAdmin: http://localhost:5050 (admin@educagestor360.com / admin123)"
+echo "Database (ensure your chosen DB - MySQL or SQL Server - is running and configured):"
+echo "- Example MySQL: localhost:3306"
+echo "- Example SQL Server: localhost:1433"
 echo
 echo "Useful commands:"
 echo "- View logs: docker-compose logs -f educagestor-api"

@@ -60,34 +60,16 @@ else {
 }
 
 Write-Host ""
-
+ 
 # Check PostgreSQL connection
-Write-Host "Checking PostgreSQL connection..." -ForegroundColor Yellow
-if (Test-CommandExists "psql") {
-    try {
-        $result = psql -h localhost -U postgres -d postgres -c "SELECT version();" 2>$null
-        if ($LASTEXITCODE -eq 0) {
-            Write-Host "✓ PostgreSQL connection successful" -ForegroundColor Green
-        }
-        else {
-            Write-Host "WARNING: Cannot connect to PostgreSQL" -ForegroundColor Yellow
-            Write-Host "Please ensure PostgreSQL is running on localhost:5432" -ForegroundColor Yellow
-            Write-Host "You can continue if you have configured a different database" -ForegroundColor Yellow
-        }
-    }
-    catch {
-        Write-Host "WARNING: Cannot connect to PostgreSQL" -ForegroundColor Yellow
-        Write-Host "Please ensure PostgreSQL is running on localhost:5432" -ForegroundColor Yellow
-    }
-}
-else {
-    Write-Host "WARNING: psql command not found" -ForegroundColor Yellow
-    Write-Host "Please ensure PostgreSQL is installed and running" -ForegroundColor Yellow
-    Write-Host "Download from: https://www.postgresql.org/download/windows/" -ForegroundColor Cyan
-}
-
+Write-Host "Checking Database connection (MySQL/SQL Server)..." -ForegroundColor Yellow
+Write-Host "Please ensure your chosen database (MySQL or SQL Server) is running and accessible." -ForegroundColor White
+Write-Host "Configure connection details in application.yml and activate the correct profile (mysql or sqlserver)." -ForegroundColor White
+Write-Host "For example, run with: mvn spring-boot:run -Dspring.profiles.active=mysql" -ForegroundColor White
+Write-Host "Or: mvn spring-boot:run -Dspring.profiles.active=sqlserver" -ForegroundColor White
+ 
 Write-Host ""
-
+ 
 # Build the application
 Write-Host "Building the application..." -ForegroundColor Yellow
 try {

@@ -6,37 +6,31 @@ server:
 spring:
   application:
     name: educagestor-api
-    
-  datasource:
-    url: jdbc:postgresql://localhost:5432/educagestor_db
-    username: ${DB_USERNAME:educagestor_user}
-    password: ${DB_PASSWORD:educagestor_pass}
-    driver-class-name: org.postgresql.Driver
-    
+  # Datasource configuration is now profile-specific (see below)
+
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: false
+      ddl-auto: update # Options: create, create-drop, update, validate, none
+    show-sql: true # Set to true for development to see generated SQL
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     defer-datasource-initialization: true
-    
+
   sql:
-    init:
-      mode: always
-      
+    init: # For schema.sql and data.sql if present for a profile
+      mode: always # Options: always, embedded, never
   security:
     user:
       name: admin
-      password: admin123
+      password: ${ADMIN_PASSWORD:admin}
+      roles: ADMIN
 
 # JWT Configuration
 jwt:
   secret: ${JWT_SECRET:mySecretKey123456789012345678901234567890}
-  expiration: 86400000 # 24 hours in milliseconds
-  refresh-expiration: 604800000 # 7 days in milliseconds
+  expiration: 86400000 # 24 hours
+  refresh-expiration: 604800000 # 7 days
 
 # Logging Configuration
 logging:
@@ -62,7 +56,7 @@ springdoc:
 
 # CORS Configuration
 cors:
-  allowed-origins: 
+  allowed-origins:
     - http://localhost:3000
     - http://localhost:3001
   allowed-methods:
@@ -78,3 +72,30 @@ cors:
 pagination:
   default-page-size: 20
   max-page-size: 100
+
+---
+spring:
+  config:
+    activate:
+      on-profile: mysql
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:educagestor_db}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+    username: ${DB_USERNAME:educagestor_user}
+    password: ${DB_PASSWORD:educagestor_pass}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect # Use MySQL8Dialect for MySQL 8+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: sqlserver
+  datasource:
+    url: jdbc:sqlserver://${DB_HOST:localhost}:${DB_PORT:1433};databaseName=${DB_NAME:educagestor_db};encrypt=false;trustServerCertificate=true
+    # For production with SQL Server, encrypt=true is recommended. trustServerCertificate=true is for dev convenience.
+    username: ${DB_USERNAME:educagestor_user}
+    password: ${DB_PASSWORD:educagestor_pass}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect # Or SQLServer2012Dialect etc. for specific versions

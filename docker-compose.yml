@@ -1,50 +1,26 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15-alpine
-    container_name: educagestor-postgres
-    environment:
-      POSTGRES_DB: educagestor_db
-      POSTGRES_USER: educagestor_user
-      POSTGRES_PASSWORD: educagestor_pass
-      PGDATA: /var/lib/postgresql/data/pgdata
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./scripts/init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
-    ports:
-      - "5432:5432"
-    networks:
-      - educagestor-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U educagestor_user -d educagestor_db"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
   # EducaGestor360 API
   educagestor-api:
     build:
       context: .
-      dockerfile: Dockerfile
     container_name: educagestor-api
     environment:
-      SPRING_PROFILES_ACTIVE: docker
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: educagestor_db
-      DB_USERNAME: educagestor_user
-      DB_PASSWORD: educagestor_pass
+      SPRING_PROFILES_ACTIVE: docker,mysql # Default to mysql for docker, can be changed
+      # For connecting to DB on host from Docker: use host.docker.internal
+      # For MySQL running on host:
+      DB_HOST: host.docker.internal # For Docker Desktop (Windows/Mac)
+      # For Linux, use `docker network inspect bridge` to find gateway IP or add --add-host=host.docker.internal:host-gateway to docker run
+      DB_PORT: 3306 # Default MySQL port
+      DB_NAME: educagestor_db # Or your chosen DB name
+      DB_USERNAME: educagestor_user # Or your chosen DB user
+      DB_PASSWORD: educagestor_pass # Or your chosen DB password
       JWT_SECRET: mySecretKey123456789012345678901234567890
     ports:
       - "8080:8080"
     networks:
       - educagestor-network
-    depends_on:
-      postgres:
-        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/api/actuator/health"]
@@ -53,6 +29,7 @@ services:
       retries: 3
       start_period: 60s
 
+  # pgAdmin is removed as it's PostgreSQL specific.
   # pgAdmin (Optional - for database management)
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -60,22 +37,17 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@educagestor360.com
       PGADMIN_DEFAULT_PASSWORD: admin123
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     ports:
       - "5050:80"
-    networks:
-      - educagestor-network
-    depends_on:
-      - postgres
     restart: unless-stopped
     profiles:
       - tools
+    # Note: pgAdmin is for PostgreSQL. For MySQL, use MySQL Workbench or similar.
+    # For SQL Server, use SQL Server Management Studio (SSMS) or Azure Data Studio.
 
 volumes:
-  postgres_data:
-    driver: local
   pgadmin_data:
     driver: local
 

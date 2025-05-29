@@ -146,9 +146,9 @@ Write-Host "- Swagger UI: http://localhost:8080/swagger-ui.html" -ForegroundColo
 Write-Host "- API Docs: http://localhost:8080/api-docs" -ForegroundColor Cyan
 Write-Host "- Health Check: http://localhost:8080/api/actuator/health" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "Database:" -ForegroundColor White
-Write-Host "- PostgreSQL: localhost:5432" -ForegroundColor Cyan
-Write-Host "- pgAdmin: http://localhost:5050 (admin@educagestor360.com / admin123)" -ForegroundColor Cyan
+Write-Host "Database (ensure your chosen DB - MySQL or SQL Server - is running and configured):" -ForegroundColor White
+Write-Host "- Example MySQL: localhost:3306" -ForegroundColor Cyan
+Write-Host "- Example SQL Server: localhost:1433" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Useful commands:" -ForegroundColor White
 Write-Host "- View logs: docker-compose logs -f educagestor-api" -ForegroundColor Yellow
