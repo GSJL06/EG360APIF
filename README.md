@@ -71,36 +71,44 @@ ALTER ROLE db_owner ADD MEMBER educagestor_user;
 
 ### 3. Configurar Aplicación
 
-Actualiza `src/main/resources/application.yml` con las credenciales de tu base de datos:
+El archivo `src/main/resources/application.yml` ya está configurado con perfiles para MySQL y SQL Server. Solo necesitas:
 
-#### Para MySQL:
+#### Opción 1: Usar variables de entorno (Recomendado para producción)
 
-```yaml
-spring:
-  profiles:
-    active: mysql
-  datasource:
-    url: jdbc:mysql://localhost:3306/educagestor_db
-    username: educagestor_user
-    password: educagestor_pass
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
+```bash
+# Para MySQL
+export DB_HOST=localhost
+export DB_PORT=3306
+export DB_NAME=educagestor_db
+export DB_USERNAME=educagestor_user
+export DB_PASSWORD=educagestor_pass
 ```
 
-#### Para SQL Server:
+```bash
+# Para SQL Server
+export DB_HOST=localhost
+export DB_PORT=1433
+export DB_NAME=educagestor_db
+export DB_USERNAME=educagestor_user
+export DB_PASSWORD=educagestor_pass
+```
+
+#### Opción 2: Modificar valores por defecto en application.yml
+
+Si quieres cambiar los valores por defecto, modifica las secciones de perfil en `application.yml`:
 
 ```yaml
-spring:
-  profiles:
-    active: sqlserver
-  datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=educagestor_db
-    username: educagestor_user
-    password: educagestor_pass
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-  jpa:
-    database-platform: org.hibernate.dialect.SQLServerDialect
+# Para MySQL (busca la sección con "on-profile: mysql")
+url: jdbc:mysql://tu-host:3306/tu-base-datos?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+username: tu-usuario
+password: tu-contraseña
+```
+
+```yaml
+# Para SQL Server (busca la sección con "on-profile: sqlserver")
+url: jdbc:sqlserver://tu-host:1433;databaseName=tu-base-datos;encrypt=false;trustServerCertificate=true
+username: tu-usuario
+password: tu-contraseña
 ```
 
 ### 4. Construir y Ejecutar
