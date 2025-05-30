@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * Swagger/OpenAPI configuration for the EducaGestor360 API
- * 
+ *
  * This configuration sets up comprehensive API documentation with
  * JWT authentication support and detailed endpoint descriptions.
  */
@@ -28,7 +28,7 @@ public class SwaggerConfig {
 
     /**
      * Configures OpenAPI documentation
-     * 
+     *
      * @return OpenAPI configuration
      */
     @Bean
@@ -36,8 +36,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(apiInfo())
                 .servers(List.of(
-                    new Server().url("http://localhost:" + serverPort + "/api").description("Local Development Server"),
-                    new Server().url("https://api.educagestor360.com/api").description("Production Server")
+                    new Server().url("http://localhost:8080/api").description("Local Development Server")
                 ))
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
                 .components(new Components()
@@ -46,35 +45,13 @@ public class SwaggerConfig {
 
     /**
      * Creates API information
-     * 
+     *
      * @return Info object with API details
      */
     private Info apiInfo() {
         return new Info()
                 .title("EducaGestor360 API")
-                .description("Comprehensive Educational Management Platform API\n\n" +
-                           "## Overview\n" +
-                           "EducaGestor360 is a complete educational management system that provides RESTful APIs for:\n" +
-                           "- User authentication and authorization\n" +
-                           "- Student management and academic tracking\n" +
-                           "- Teacher management and course assignments\n" +
-                           "- Course creation and enrollment management\n" +
-                           "- Grade recording and academic analytics\n\n" +
-                           "## Authentication\n" +
-                           "This API uses JWT (JSON Web Token) for authentication. To access protected endpoints:\n" +
-                           "1. Login using `/auth/login` endpoint\n" +
-                           "2. Include the JWT token in the Authorization header: `Bearer <token>`\n\n" +
-                           "## User Roles\n" +
-                           "- **ADMIN**: Full system access, can manage all entities\n" +
-                           "- **TEACHER**: Can manage courses, students, and grades for assigned courses\n" +
-                           "- **STUDENT**: Limited access, can view own information and grades\n\n" +
-                           "## Error Handling\n" +
-                           "The API returns consistent error responses with appropriate HTTP status codes:\n" +
-                           "- 400: Bad Request (validation errors)\n" +
-                           "- 401: Unauthorized (authentication required)\n" +
-                           "- 403: Forbidden (insufficient permissions)\n" +
-                           "- 404: Not Found (resource doesn't exist)\n" +
-                           "- 500: Internal Server Error")
+                .description("Comprehensive Educational Management Platform API")
                 .version("1.0.0")
                 .contact(new Contact()
                     .name("EducaGestor360 Development Team")
@@ -87,7 +64,7 @@ public class SwaggerConfig {
 
     /**
      * Creates JWT security scheme
-     * 
+     *
      * @return SecurityScheme for JWT authentication
      */
     private SecurityScheme createAPIKeyScheme() {
