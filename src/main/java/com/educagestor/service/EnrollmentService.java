@@ -21,7 +21,7 @@ import java.time.LocalDate;
 
 /**
  * Service class for enrollment management operations
- * 
+ *
  * This service handles student course enrollments, enrollment status management,
  * and enrollment-related business logic operations.
  */
@@ -42,7 +42,7 @@ public class EnrollmentService {
 
     /**
      * Enrolls a student in a course
-     * 
+     *
      * @param studentId student ID
      * @param courseId course ID
      * @return enrollment DTO
@@ -92,8 +92,22 @@ public class EnrollmentService {
     }
 
     /**
+     * Gets all enrollments with pagination
+     *
+     * @param pageable pagination information
+     * @return page of enrollment DTOs
+     */
+    @Transactional(readOnly = true)
+    public Page<EnrollmentDto> getAllEnrollments(Pageable pageable) {
+        logger.info("Fetching all enrollments with pagination");
+
+        Page<Enrollment> enrollments = enrollmentRepository.findAll(pageable);
+        return enrollments.map(this::convertToEnrollmentDto);
+    }
+
+    /**
      * Gets enrollment by ID
-     * 
+     *
      * @param enrollmentId enrollment ID
      * @return enrollment DTO
      * @throws ResourceNotFoundException if enrollment not found
@@ -110,7 +124,7 @@ public class EnrollmentService {
 
     /**
      * Gets enrollments by student ID
-     * 
+     *
      * @param studentId student ID
      * @param pageable pagination information
      * @return page of enrollment DTOs
@@ -125,7 +139,7 @@ public class EnrollmentService {
 
     /**
      * Gets enrollments by course ID
-     * 
+     *
      * @param courseId course ID
      * @param pageable pagination information
      * @return page of enrollment DTOs
@@ -140,7 +154,7 @@ public class EnrollmentService {
 
     /**
      * Cancels an enrollment
-     * 
+     *
      * @param enrollmentId enrollment ID
      * @throws ResourceNotFoundException if enrollment not found
      * @throws BadRequestException if enrollment cannot be cancelled
@@ -166,7 +180,7 @@ public class EnrollmentService {
 
     /**
      * Completes an enrollment with final grade
-     * 
+     *
      * @param enrollmentId enrollment ID
      * @param finalGrade final grade
      * @return updated enrollment DTO
@@ -200,7 +214,7 @@ public class EnrollmentService {
 
     /**
      * Gets enrollments by status
-     * 
+     *
      * @param status enrollment status
      * @param pageable pagination information
      * @return page of enrollment DTOs
@@ -215,7 +229,7 @@ public class EnrollmentService {
 
     /**
      * Converts Enrollment entity to EnrollmentDto
-     * 
+     *
      * @param enrollment Enrollment entity
      * @return EnrollmentDto
      */

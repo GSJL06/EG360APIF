@@ -42,7 +42,7 @@ if (Test-CommandExists "mvn") {
     # Build the application with Maven
     Write-Host ""
     Write-Host "Building the application with Maven..." -ForegroundColor Yellow
-    
+
     try {
         mvn clean package -DskipTests
         if ($LASTEXITCODE -ne 0) {
@@ -59,7 +59,7 @@ if (Test-CommandExists "mvn") {
 else {
     Write-Host "WARNING: Maven not found. Skipping build step." -ForegroundColor Yellow
     Write-Host "Make sure you have a pre-built JAR file in target/ directory" -ForegroundColor Yellow
-    
+
     # Check if JAR exists
     $jarFiles = Get-ChildItem -Path "target" -Filter "*.jar" -ErrorAction SilentlyContinue
     if (-not $jarFiles) {
@@ -75,18 +75,53 @@ else {
 Write-Host ""
 Write-Host "Building Docker image..." -ForegroundColor Yellow
 
-try {
-    docker build -t $DOCKER_IMAGE .
-    if ($LASTEXITCODE -ne 0) {
-        throw "Docker build failed"
+# Try to clean Docker cache first if build fails
+$buildAttempt = 1
+$maxAttempts = 2
+
+while ($buildAttempt -le $maxAttempts) {
+    try {
+        if ($buildAttempt -eq 2) {
+            Write-Host "Cleaning Docker cache and trying again..." -ForegroundColor Yellow
+            docker system prune -f
+            docker builder prune -f
+        }
+
+        docker build -t $DOCKER_IMAGE .
+        if ($LASTEXITCODE -ne 0) {
+            throw "Docker build failed"
+        }
+        Write-Host "✓ Docker image built successfully: $DOCKER_IMAGE" -ForegroundColor Green
+        break
     }
-    Write-Host "✓ Docker image built successfully: $DOCKER_IMAGE" -ForegroundColor Green
-}
-catch {
-    Write-Host "ERROR: Docker image build failed" -ForegroundColor Red
-    Write-Host "Make sure Docker Desktop is running" -ForegroundColor Red
-    Read-Host "Press Enter to exit"
-    exit 1
+    catch {
+        if ($buildAttempt -eq $maxAttempts) {
+            Write-Host "ERROR: Docker image build failed after $maxAttempts attempts" -ForegroundColor Red
+            Write-Host "Trying alternative build method..." -ForegroundColor Yellow
+
+            # Try with simple Dockerfile
+            if (Test-Path "Dockerfile.simple") {
+                try {
+                    docker build -f Dockerfile.simple -t $DOCKER_IMAGE .
+                    if ($LASTEXITCODE -eq 0) {
+                        Write-Host "✓ Docker image built with alternative method" -ForegroundColor Green
+                        break
+                    }
+                }
+                catch {
+                    Write-Host "Alternative build also failed" -ForegroundColor Red
+                }
+            }
+
+            Write-Host "Please try:" -ForegroundColor White
+            Write-Host "1. Restart Docker Desktop" -ForegroundColor Yellow
+            Write-Host "2. Run: docker system prune -a" -ForegroundColor Yellow
+            Write-Host "3. Check Docker Desktop settings" -ForegroundColor Yellow
+            Read-Host "Press Enter to exit"
+            exit 1
+        }
+        $buildAttempt++
+    }
 }
 
 # Stop existing containers

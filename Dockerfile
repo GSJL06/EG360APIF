@@ -1,5 +1,8 @@
 # Multi-stage build for EducaGestor360 API
-FROM maven:3.9.4-openjdk-17 AS build
+FROM eclipse-temurin:17-jdk AS build
+
+# Install Maven
+RUN apt-get update && apt-get install -y maven
 
 # Set working directory
 WORKDIR /app
@@ -13,7 +16,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Runtime stage
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre
 
 # Set working directory
 WORKDIR /app

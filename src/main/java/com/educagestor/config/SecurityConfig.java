@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 /**
  * Security configuration for the EducaGestor360 API
- * 
+ *
  * This configuration sets up JWT-based authentication, CORS settings,
  * and authorization rules for different endpoints and user roles.
  */
@@ -38,7 +38,7 @@ public class SecurityConfig {
 
     /**
      * Creates the JWT authentication filter
-     * 
+     *
      * @return AuthTokenFilter instance
      */
     @Bean
@@ -48,7 +48,7 @@ public class SecurityConfig {
 
     /**
      * Creates the password encoder
-     * 
+     *
      * @return BCryptPasswordEncoder instance
      */
     @Bean
@@ -58,7 +58,7 @@ public class SecurityConfig {
 
     /**
      * Creates the authentication provider
-     * 
+     *
      * @return DaoAuthenticationProvider instance
      */
     @Bean
@@ -71,7 +71,7 @@ public class SecurityConfig {
 
     /**
      * Creates the authentication manager
-     * 
+     *
      * @param authConfig authentication configuration
      * @return AuthenticationManager instance
      * @throws Exception if configuration fails
@@ -83,7 +83,7 @@ public class SecurityConfig {
 
     /**
      * Configures CORS settings
-     * 
+     *
      * @return CorsConfigurationSource instance
      */
     @Bean
@@ -93,7 +93,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -101,7 +101,7 @@ public class SecurityConfig {
 
     /**
      * Configures the security filter chain
-     * 
+     *
      * @param http HttpSecurity instance
      * @return SecurityFilterChain instance
      * @throws Exception if configuration fails
@@ -113,33 +113,33 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
                 // Public endpoints
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
-                
+
                 // Admin only endpoints
-                .requestMatchers("/api/users/**").hasRole("ADMIN")
-                
+                .requestMatchers("/users/**").hasRole("ADMIN")
+
                 // Student endpoints
-                .requestMatchers("/api/students/**").hasAnyRole("ADMIN", "TEACHER")
-                .requestMatchers("/api/students/profile").hasRole("STUDENT")
-                
+                .requestMatchers("/students/**").hasAnyRole("ADMIN", "TEACHER")
+                .requestMatchers("/students/profile").hasRole("STUDENT")
+
                 // Teacher endpoints
-                .requestMatchers("/api/teachers/**").hasRole("ADMIN")
-                .requestMatchers("/api/teachers/profile").hasRole("TEACHER")
-                
+                .requestMatchers("/teachers/**").hasRole("ADMIN")
+                .requestMatchers("/teachers/profile").hasRole("TEACHER")
+
                 // Course endpoints
-                .requestMatchers("/api/courses").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
-                .requestMatchers("/api/courses/**").hasAnyRole("ADMIN", "TEACHER")
-                
+                .requestMatchers("/courses").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+                .requestMatchers("/courses/**").hasAnyRole("ADMIN", "TEACHER")
+
                 // Enrollment endpoints
-                .requestMatchers("/api/enrollments").hasAnyRole("ADMIN", "TEACHER")
-                .requestMatchers("/api/enrollments/student/**").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
-                
+                .requestMatchers("/enrollments").hasAnyRole("ADMIN", "TEACHER")
+                .requestMatchers("/enrollments/student/**").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+
                 // Grade endpoints
-                .requestMatchers("/api/grades").hasAnyRole("ADMIN", "TEACHER")
-                .requestMatchers("/api/grades/student/**").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
-                
+                .requestMatchers("/grades").hasAnyRole("ADMIN", "TEACHER")
+                .requestMatchers("/grades/student/**").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+
                 // All other requests require authentication
                 .anyRequest().authenticated()
             );

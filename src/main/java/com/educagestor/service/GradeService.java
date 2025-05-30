@@ -21,7 +21,7 @@ import java.time.LocalDate;
 
 /**
  * Service class for grade management operations
- * 
+ *
  * This service handles grade recording, grade management,
  * and grade-related business logic operations.
  */
@@ -42,7 +42,7 @@ public class GradeService {
 
     /**
      * Records a new grade
-     * 
+     *
      * @param gradeDto grade data
      * @return created grade DTO
      * @throws BadRequestException if grade data is invalid
@@ -85,8 +85,22 @@ public class GradeService {
     }
 
     /**
+     * Gets all grades with pagination
+     *
+     * @param pageable pagination information
+     * @return page of grade DTOs
+     */
+    @Transactional(readOnly = true)
+    public Page<GradeDto> getAllGrades(Pageable pageable) {
+        logger.info("Fetching all grades with pagination");
+
+        Page<Grade> grades = gradeRepository.findAll(pageable);
+        return grades.map(this::convertToGradeDto);
+    }
+
+    /**
      * Gets grade by ID
-     * 
+     *
      * @param gradeId grade ID
      * @return grade DTO
      * @throws ResourceNotFoundException if grade not found
@@ -103,7 +117,7 @@ public class GradeService {
 
     /**
      * Gets grades by student ID
-     * 
+     *
      * @param studentId student ID
      * @param pageable pagination information
      * @return page of grade DTOs
@@ -118,7 +132,7 @@ public class GradeService {
 
     /**
      * Gets grades by course ID
-     * 
+     *
      * @param courseId course ID
      * @param pageable pagination information
      * @return page of grade DTOs
@@ -133,7 +147,7 @@ public class GradeService {
 
     /**
      * Gets grades by student and course
-     * 
+     *
      * @param studentId student ID
      * @param courseId course ID
      * @param pageable pagination information
@@ -149,7 +163,7 @@ public class GradeService {
 
     /**
      * Updates a grade
-     * 
+     *
      * @param gradeId grade ID
      * @param gradeDto updated grade data
      * @return updated grade DTO
@@ -203,7 +217,7 @@ public class GradeService {
 
     /**
      * Deletes a grade
-     * 
+     *
      * @param gradeId grade ID
      * @throws ResourceNotFoundException if grade not found
      */
@@ -219,7 +233,7 @@ public class GradeService {
 
     /**
      * Calculates average grade for a student in a course
-     * 
+     *
      * @param studentId student ID
      * @param courseId course ID
      * @return average grade
@@ -234,7 +248,7 @@ public class GradeService {
 
     /**
      * Calculates weighted average grade for a student in a course
-     * 
+     *
      * @param studentId student ID
      * @param courseId course ID
      * @return weighted average grade
@@ -249,7 +263,7 @@ public class GradeService {
 
     /**
      * Converts Grade entity to GradeDto
-     * 
+     *
      * @param grade Grade entity
      * @return GradeDto
      */

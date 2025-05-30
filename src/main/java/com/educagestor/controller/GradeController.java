@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * REST Controller for grade management operations
- * 
+ *
  * This controller handles grade recording, grade management,
  * and grade queries. It provides endpoints for grade operations.
  */
@@ -43,7 +43,7 @@ public class GradeController {
 
     /**
      * Records a new grade
-     * 
+     *
      * @param gradeDto grade data
      * @return created grade information
      */
@@ -77,15 +77,47 @@ public class GradeController {
     })
     public ResponseEntity<GradeDto> recordGrade(@Valid @RequestBody GradeDto gradeDto) {
         logger.info("Recording grade for student {} in course {}", gradeDto.getStudentId(), gradeDto.getCourseId());
-        
+
         GradeDto createdGrade = gradeService.recordGrade(gradeDto);
-        
+
         return new ResponseEntity<>(createdGrade, HttpStatus.CREATED);
     }
 
     /**
+     * Gets all grades with pagination
+     *
+     * @param page page number (0-based)
+     * @param size page size
+     * @param sortBy sort field
+     * @param sortDir sort direction
+     * @return page of grades
+     */
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @Operation(
+        summary = "Get All Grades",
+        description = "Retrieves all grades with pagination (Admin/Teacher only)"
+    )
+    public ResponseEntity<Page<GradeDto>> getAllGrades(
+            @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Page size") @RequestParam(defaultValue = "20") int size,
+            @Parameter(description = "Sort field") @RequestParam(defaultValue = "gradeDate") String sortBy,
+            @Parameter(description = "Sort direction") @RequestParam(defaultValue = "desc") String sortDir) {
+
+        logger.info("Getting all grades - page: {}, size: {}", page, size);
+
+        Sort sort = sortDir.equalsIgnoreCase("desc") ?
+            Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<GradeDto> grades = gradeService.getAllGrades(pageable);
+
+        return ResponseEntity.ok(grades);
+    }
+
+    /**
      * Gets grade by ID
-     * 
+     *
      * @param gradeId grade ID
      * @return grade information
      */
@@ -98,15 +130,15 @@ public class GradeController {
     public ResponseEntity<GradeDto> getGradeById(
             @Parameter(description = "Grade ID") @PathVariable Long gradeId) {
         logger.info("Getting grade by ID: {}", gradeId);
-        
+
         GradeDto grade = gradeService.getGradeById(gradeId);
-        
+
         return ResponseEntity.ok(grade);
     }
 
     /**
      * Gets grades by student ID
-     * 
+     *
      * @param studentId student ID
      * @param page page number
      * @param size page size
@@ -122,18 +154,18 @@ public class GradeController {
             @Parameter(description = "Student ID") @PathVariable Long studentId,
             @Parameter(description = "Page number") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Page size") @RequestParam(defaultValue = "20") int size) {
-        
+
         logger.info("Getting grades for student: {}", studentId);
-        
+
         Pageable pageable = PageRequest.of(page, size, Sort.by("gradeDate").descending());
         Page<GradeDto> grades = gradeService.getGradesByStudentId(studentId, pageable);
-        
+
         return ResponseEntity.ok(grades);
     }
 
     /**
      * Gets grades by course ID
-     * 
+     *
      * @param courseId course ID
      * @param page page number
      * @param size page size
@@ -149,18 +181,18 @@ public class GradeController {
             @Parameter(description = "Course ID") @PathVariable Long courseId,
             @Parameter(description = "Page number") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Page size") @RequestParam(defaultValue = "20") int size) {
-        
+
         logger.info("Getting grades for course: {}", courseId);
-        
+
         Pageable pageable = PageRequest.of(page, size, Sort.by("gradeDate").descending());
         Page<GradeDto> grades = gradeService.getGradesByCourseId(courseId, pageable);
-        
+
         return ResponseEntity.ok(grades);
     }
 
     /**
      * Gets grades by student and course
-     * 
+     *
      * @param studentId student ID
      * @param courseId course ID
      * @param page page number
@@ -178,18 +210,18 @@ public class GradeController {
             @Parameter(description = "Course ID") @PathVariable Long courseId,
             @Parameter(description = "Page number") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Page size") @RequestParam(defaultValue = "20") int size) {
-        
+
         logger.info("Getting grades for student {} in course {}", studentId, courseId);
-        
+
         Pageable pageable = PageRequest.of(page, size, Sort.by("gradeDate").descending());
         Page<GradeDto> grades = gradeService.getGradesByStudentAndCourse(studentId, courseId, pageable);
-        
+
         return ResponseEntity.ok(grades);
     }
 
     /**
      * Updates a grade
-     * 
+     *
      * @param gradeId grade ID
      * @param gradeDto updated grade data
      * @return updated grade information
@@ -204,15 +236,15 @@ public class GradeController {
             @Parameter(description = "Grade ID") @PathVariable Long gradeId,
             @Valid @RequestBody GradeDto gradeDto) {
         logger.info("Updating grade: {}", gradeId);
-        
+
         GradeDto updatedGrade = gradeService.updateGrade(gradeId, gradeDto);
-        
+
         return ResponseEntity.ok(updatedGrade);
     }
 
     /**
      * Deletes a grade
-     * 
+     *
      * @param gradeId grade ID
      * @return success message
      */
@@ -225,15 +257,15 @@ public class GradeController {
     public ResponseEntity<String> deleteGrade(
             @Parameter(description = "Grade ID") @PathVariable Long gradeId) {
         logger.info("Deleting grade: {}", gradeId);
-        
+
         gradeService.deleteGrade(gradeId);
-        
+
         return ResponseEntity.ok("Grade deleted successfully");
     }
 
     /**
      * Calculates average grade for a student in a course
-     * 
+     *
      * @param studentId student ID
      * @param courseId course ID
      * @return average grade
@@ -247,17 +279,17 @@ public class GradeController {
     public ResponseEntity<Double> calculateAverageGrade(
             @Parameter(description = "Student ID") @PathVariable Long studentId,
             @Parameter(description = "Course ID") @PathVariable Long courseId) {
-        
+
         logger.info("Calculating average grade for student {} in course {}", studentId, courseId);
-        
+
         Double averageGrade = gradeService.calculateAverageGrade(studentId, courseId);
-        
+
         return ResponseEntity.ok(averageGrade);
     }
 
     /**
      * Calculates weighted average grade for a student in a course
-     * 
+     *
      * @param studentId student ID
      * @param courseId course ID
      * @return weighted average grade
@@ -271,11 +303,11 @@ public class GradeController {
     public ResponseEntity<Double> calculateWeightedAverageGrade(
             @Parameter(description = "Student ID") @PathVariable Long studentId,
             @Parameter(description = "Course ID") @PathVariable Long courseId) {
-        
+
         logger.info("Calculating weighted average grade for student {} in course {}", studentId, courseId);
-        
+
         Double weightedAverageGrade = gradeService.calculateWeightedAverageGrade(studentId, courseId);
-        
+
         return ResponseEntity.ok(weightedAverageGrade);
     }
 }

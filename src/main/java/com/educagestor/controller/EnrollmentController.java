@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * REST Controller for enrollment management operations
- * 
+ *
  * This controller handles student course enrollments, enrollment status management,
  * and enrollment queries. It provides endpoints for enrollment operations.
  */
@@ -43,7 +43,7 @@ public class EnrollmentController {
 
     /**
      * Enrolls a student in a course
-     * 
+     *
      * @param studentId student ID
      * @param courseId course ID
      * @return enrollment information
@@ -80,15 +80,47 @@ public class EnrollmentController {
             @Parameter(description = "Student ID") @RequestParam Long studentId,
             @Parameter(description = "Course ID") @RequestParam Long courseId) {
         logger.info("Enrolling student {} in course {}", studentId, courseId);
-        
+
         EnrollmentDto enrollment = enrollmentService.enrollStudent(studentId, courseId);
-        
+
         return new ResponseEntity<>(enrollment, HttpStatus.CREATED);
     }
 
     /**
+     * Gets all enrollments with pagination
+     *
+     * @param page page number (0-based)
+     * @param size page size
+     * @param sortBy sort field
+     * @param sortDir sort direction
+     * @return page of enrollments
+     */
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @Operation(
+        summary = "Get All Enrollments",
+        description = "Retrieves all enrollments with pagination (Admin/Teacher only)"
+    )
+    public ResponseEntity<Page<EnrollmentDto>> getAllEnrollments(
+            @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Page size") @RequestParam(defaultValue = "20") int size,
+            @Parameter(description = "Sort field") @RequestParam(defaultValue = "enrollmentDate") String sortBy,
+            @Parameter(description = "Sort direction") @RequestParam(defaultValue = "desc") String sortDir) {
+
+        logger.info("Getting all enrollments - page: {}, size: {}", page, size);
+
+        Sort sort = sortDir.equalsIgnoreCase("desc") ?
+            Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<EnrollmentDto> enrollments = enrollmentService.getAllEnrollments(pageable);
+
+        return ResponseEntity.ok(enrollments);
+    }
+
+    /**
      * Gets enrollment by ID
-     * 
+     *
      * @param enrollmentId enrollment ID
      * @return enrollment information
      */
@@ -101,15 +133,15 @@ public class EnrollmentController {
     public ResponseEntity<EnrollmentDto> getEnrollmentById(
             @Parameter(description = "Enrollment ID") @PathVariable Long enrollmentId) {
         logger.info("Getting enrollment by ID: {}", enrollmentId);
-        
+
         EnrollmentDto enrollment = enrollmentService.getEnrollmentById(enrollmentId);
-        
+
         return ResponseEntity.ok(enrollment);
     }
 
     /**
      * Gets enrollments by student ID
-     * 
+     *
      * @param studentId student ID
      * @param page page number
      * @param size page size
@@ -125,18 +157,18 @@ public class EnrollmentController {
             @Parameter(description = "Student ID") @PathVariable Long studentId,
             @Parameter(description = "Page number") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Page size") @RequestParam(defaultValue = "20") int size) {
-        
+
         logger.info("Getting enrollments for student: {}", studentId);
-        
+
         Pageable pageable = PageRequest.of(page, size, Sort.by("enrollmentDate").descending());
         Page<EnrollmentDto> enrollments = enrollmentService.getEnrollmentsByStudentId(studentId, pageable);
-        
+
         return ResponseEntity.ok(enrollments);
     }
 
     /**
      * Gets enrollments by course ID
-     * 
+     *
      * @param courseId course ID
      * @param page page number
      * @param size page size
@@ -152,18 +184,18 @@ public class EnrollmentController {
             @Parameter(description = "Course ID") @PathVariable Long courseId,
             @Parameter(description = "Page number") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Page size") @RequestParam(defaultValue = "20") int size) {
-        
+
         logger.info("Getting enrollments for course: {}", courseId);
-        
+
         Pageable pageable = PageRequest.of(page, size, Sort.by("enrollmentDate").descending());
         Page<EnrollmentDto> enrollments = enrollmentService.getEnrollmentsByCourseId(courseId, pageable);
-        
+
         return ResponseEntity.ok(enrollments);
     }
 
     /**
      * Cancels an enrollment
-     * 
+     *
      * @param enrollmentId enrollment ID
      * @return success message
      */
@@ -198,15 +230,15 @@ public class EnrollmentController {
     public ResponseEntity<String> cancelEnrollment(
             @Parameter(description = "Enrollment ID") @PathVariable Long enrollmentId) {
         logger.info("Cancelling enrollment: {}", enrollmentId);
-        
+
         enrollmentService.cancelEnrollment(enrollmentId);
-        
+
         return ResponseEntity.ok("Enrollment cancelled successfully");
     }
 
     /**
      * Completes an enrollment with final grade
-     * 
+     *
      * @param enrollmentId enrollment ID
      * @param finalGrade final grade
      * @return updated enrollment information
@@ -221,15 +253,15 @@ public class EnrollmentController {
             @Parameter(description = "Enrollment ID") @PathVariable Long enrollmentId,
             @Parameter(description = "Final grade (0-100)") @RequestParam Double finalGrade) {
         logger.info("Completing enrollment {} with grade {}", enrollmentId, finalGrade);
-        
+
         EnrollmentDto completedEnrollment = enrollmentService.completeEnrollment(enrollmentId, finalGrade);
-        
+
         return ResponseEntity.ok(completedEnrollment);
     }
 
     /**
      * Gets enrollments by status
-     * 
+     *
      * @param status enrollment status
      * @param page page number
      * @param size page size
@@ -245,12 +277,12 @@ public class EnrollmentController {
             @Parameter(description = "Enrollment status") @PathVariable Enrollment.EnrollmentStatus status,
             @Parameter(description = "Page number") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Page size") @RequestParam(defaultValue = "20") int size) {
-        
+
         logger.info("Getting enrollments by status: {}", status);
-        
+
         Pageable pageable = PageRequest.of(page, size, Sort.by("enrollmentDate").descending());
         Page<EnrollmentDto> enrollments = enrollmentService.getEnrollmentsByStatus(status, pageable);
-        
+
         return ResponseEntity.ok(enrollments);
     }
 }

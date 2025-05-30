@@ -1,0 +1,9 @@
+{
+  "username": "admin",
+  "email": "admin@educagestor360.com",
+  "password": "admin123",
+  "firstName": "System",
+  "lastName": "Administrator",
+  "phoneNumber": "+1234567890",
+  "roles": ["ADMIN"]
+}
