@@ -1,6 +1,8 @@
 # EducaGestor360 API
 
-Comprehensive Educational Management Platform API built with Spring Boot, MySQL, and JWT authentication.
+Plataforma Integral de Gestión Educativa API construida con Spring Boot, MySQL y autenticación JWT.
+
+**✅ Versión Actual: v1.0.1 - Completamente Funcional con Swagger UI Operativo**
 
 ## 🚀 Características
 
@@ -17,24 +19,24 @@ Comprehensive Educational Management Platform API built with Spring Boot, MySQL,
 ## 🛠 Stack Tecnológico
 
 - **Backend**: Java 17, Spring Boot 3.2.0
-- **Database**: MySQL 8.0+
-- **Security**: Spring Security, JWT (JSON Web Tokens)
-- **Documentation**: Swagger/OpenAPI 3
-- **Build Tool**: Maven
+- **Base de Datos**: MySQL 8.0+ (Principal), SQL Server (Alternativo)
+- **Seguridad**: Spring Security, JWT (JSON Web Tokens)
+- **Documentación**: Swagger/OpenAPI 3 ✅ **FUNCIONANDO**
+- **Herramienta de Construcción**: Maven
 - **Testing**: JUnit 5, Spring Boot Test
 
 ## 📋 Prerrequisitos
 
-- Java 17 or higher
-- MySQL 8.0 or higher
-- Maven 3.6 or higher
+- Java 17 o superior
+- MySQL 8.0 o superior
+- Maven 3.6 o superior
 
 ## 🔧 Instalación y Configuración
 
 ### 1. Clonar el Repositorio
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/GSJL06/EG360APIF.git
 cd educagestor-api
 ```
 
@@ -43,27 +45,27 @@ cd educagestor-api
 #### Para MySQL:
 
 ```sql
--- Create database
+-- Crear base de datos
 CREATE DATABASE IF NOT EXISTS educagestor_db;
 
--- Create user (Updated credentials)
+-- Crear usuario (Credenciales actualizadas)
 CREATE USER IF NOT EXISTS 'educagestor_user1'@'localhost' IDENTIFIED BY 'educagestor_pass';
 
--- Grant privileges
+-- Otorgar privilegios
 GRANT ALL PRIVILEGES ON educagestor_db.* TO 'educagestor_user1'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-**✅ Verified Working Configuration:**
+**✅ Configuración Verificada y Funcionando:**
 
-- Database: `educagestor_db`
-- Username: `educagestor_user1`
-- Password: `educagestor_pass`
+- Base de Datos: `educagestor_db`
+- Usuario: `educagestor_user1`
+- Contraseña: `educagestor_pass`
 - Host: `localhost:3306`
 
-### 3. Configure Application
+### 3. Configurar Aplicación
 
-The application is pre-configured for MySQL. The configuration is in `src/main/resources/application-mysql.yml`:
+La aplicación está preconfigurada para MySQL. La configuración está en `src/main/resources/application-mysql.yml`:
 
 ```yaml
 spring:
@@ -76,43 +78,36 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
 ```
 
-```yaml
-# Para SQL Server (busca la sección con "on-profile: sqlserver")
-url: jdbc:sqlserver://tu-host:1433;databaseName=tu-base-datos;encrypt=false;trustServerCertificate=true
-username: tu-usuario
-password: tu-contraseña
-```
-
-#### Quick Start (Recommended):
+#### Inicio Rápido (Recomendado):
 
 ```bash
-# Build the application
+# Construir la aplicación
 mvn clean package -DskipTests
 
-# Run with MySQL profile
+# Ejecutar con perfil MySQL
 java -jar target/educagestor-api-1.0.0.jar --spring.profiles.active=mysql
 ```
 
-#### Alternative Methods:
+#### Métodos Alternativos:
 
-**Using Maven directly:**
+**Usando Maven directamente:**
 
 ```bash
 mvn clean install
 mvn spring-boot:run -Dspring.profiles.active=mysql
 ```
 
-**Using Docker:**
+**Usando Docker:**
 
 ```bash
-# Build and run with Docker Compose
+# Construir y ejecutar con Docker Compose
 docker-compose up --build
 ```
 
-**For Development:**
+**Para Desarrollo:**
 
 ```bash
-# Run in development mode with hot reload
+# Ejecutar en modo desarrollo con recarga automática
 mvn spring-boot:run -Dspring.profiles.active=mysql
 ```
 
@@ -120,33 +115,33 @@ La API estará disponible en `http://localhost:8080/api`
 
 ## 📚 Documentación API
 
-✅ **Fully Functional Swagger Documentation**
+✅ **Documentación Swagger Completamente Funcional**
 
-Once the application is running, access the interactive API documentation at:
+Una vez que la aplicación esté ejecutándose, accede a la documentación interactiva de la API en:
 
-- **Swagger UI**: http://localhost:8080/api/swagger-ui.html ✅ **WORKING**
-- **OpenAPI JSON**: http://localhost:8080/api/v3/api-docs ✅ **WORKING**
+- **Swagger UI**: http://localhost:8080/api/swagger-ui.html ✅ **FUNCIONANDO**
+- **OpenAPI JSON**: http://localhost:8080/api/v3/api-docs ✅ **FUNCIONANDO**
 
-**Features Available in Swagger UI:**
+**Características Disponibles en Swagger UI:**
 
-- 🔐 JWT Authentication support with Bearer token
-- 📋 7 API categories: Authentication, User Management, Student Management, Teacher Management, Course Management, Grade Management, Enrollment Management
-- 📖 Complete endpoint documentation with request/response schemas
-- 🧪 Interactive testing interface
-- 📊 Data validation and constraints documentation
+- 🔐 Soporte de autenticación JWT con Bearer token
+- 📋 7 categorías de API: Autenticación, Gestión de Usuarios, Gestión de Estudiantes, Gestión de Profesores, Gestión de Cursos, Gestión de Calificaciones, Gestión de Inscripciones
+- 📖 Documentación completa de endpoints con esquemas de solicitud/respuesta
+- 🧪 Interfaz de testing interactiva
+- 📊 Documentación de validación de datos y restricciones
 
-### 🔐 Default Test Users
+### 🔐 Usuarios de Prueba Predeterminados
 
-The application comes with pre-configured test users:
+La aplicación viene con usuarios de prueba preconfigurados:
 
-| Username   | Password   | Role    | Description              |
-| ---------- | ---------- | ------- | ------------------------ |
-| `admin`    | `admin123` | ADMIN   | Full system access       |
-| `teacher1` | `admin123` | TEACHER | Computer Science teacher |
-| `teacher2` | `admin123` | TEACHER | Mathematics teacher      |
-| `student1` | `admin123` | STUDENT | Test student 1           |
-| `student2` | `admin123` | STUDENT | Test student 2           |
-| `student3` | `admin123` | STUDENT | Test student 3           |
+| Usuario    | Contraseña | Rol     | Descripción                            |
+| ---------- | ---------- | ------- | -------------------------------------- |
+| `admin`    | `admin123` | ADMIN   | Acceso completo al sistema             |
+| `teacher1` | `admin123` | TEACHER | Profesor de Ciencias de la Computación |
+| `teacher2` | `admin123` | TEACHER | Profesor de Matemáticas                |
+| `student1` | `admin123` | STUDENT | Estudiante de prueba 1                 |
+| `student2` | `admin123` | STUDENT | Estudiante de prueba 2                 |
+| `student3` | `admin123` | STUDENT | Estudiante de prueba 3                 |
 
 ## 🔐 Autenticación
 
@@ -219,71 +214,71 @@ The application comes with pre-configured test users:
 - `GET /api/grades/course/{courseId}` - Obtener calificaciones del curso
 - `PUT /api/grades/{id}` - Actualizar calificación
 
-## 🧪 Testing
+## 🧪 Pruebas
 
-### Unit Tests
+### Pruebas Unitarias
 
-Run the test suite:
+Ejecutar la suite de pruebas:
 
 ```bash
 mvn test
 ```
 
-### API Testing
+### Pruebas de API
 
-Test the authentication endpoint:
+Probar el endpoint de autenticación:
 
 ```bash
-# Login with admin user
+# Iniciar sesión con usuario admin
 curl -X POST -H "Content-Type: application/json" \
   -d '{"username":"admin","password":"admin123"}' \
   http://localhost:8080/api/auth/login
 ```
 
-### Quick API Verification
+### Verificación Rápida de API
 
 ```bash
-# Check if API is running
+# Verificar si la API está ejecutándose
 curl http://localhost:8080/api/swagger-ui.html
 
-# Test authentication
+# Probar autenticación
 curl -X POST -H "Content-Type: application/json" \
   -d '{"username":"testadmin","password":"admin123"}' \
   http://localhost:8080/api/auth/login
 ```
 
-## 🧪 Comprehensive API Testing
+## 🧪 Pruebas Comprehensivas de API
 
-### Automated Test Script
+### Script de Pruebas Automatizadas
 
-We've included a PowerShell script for comprehensive API testing:
+Hemos incluido un script de PowerShell para pruebas comprehensivas de API:
 
 ```bash
-# Run the comprehensive test script
+# Ejecutar el script de pruebas comprehensivas
 powershell -ExecutionPolicy Bypass -File comprehensive-api-test.ps1
 ```
 
-### Pre-loaded Test Data
+### Datos de Prueba Precargados
 
-The application comes with pre-loaded test data for immediate testing:
+La aplicación viene con datos de prueba precargados para testing inmediato:
 
-**Test Users:**
+**Usuarios de Prueba:**
 
-- **Admin:** `testadmin` / `admin123` (ADMIN role) ✅ Verified
-- **Teachers:** `teacher1`, `teacher2` / `admin123` (TEACHER role)
-- **Students:** `student1`, `student2`, `student3` / `admin123` (STUDENT role)
+- **Admin:** `testadmin` / `admin123` (rol ADMIN) ✅ Verificado
+- **Profesores:** `teacher1`, `teacher2` / `admin123` (rol TEACHER)
+- **Estudiantes:** `student1`, `student2`, `student3` / `admin123` (rol STUDENT)
 
-**Sample Data:**
+**Datos de Ejemplo:**
 
-- **8 Users** (1 admin + 1 testadmin + 2 teachers + 3 students + 1 testuser)
-- **3 Students** with complete academic profiles
-- **3 Courses** (CS101: Introduction to Programming, MATH201: Calculus I, CS201: Data Structures)
-- **4 Enrollments** linking students to courses
-- **24+ Grades** with various assignment types and scores
+- **8 Usuarios** (1 admin + 1 testadmin + 2 profesores + 3 estudiantes + 1 testuser)
+- **3 Estudiantes** con perfiles académicos completos
+- **3 Cursos** (CS101: Introducción a la Programación, MATH201: Cálculo I, CS201: Estructuras de Datos)
+- **4 Inscripciones** vinculando estudiantes a cursos
+- **24+ Calificaciones** con varios tipos de asignaciones y puntajes
 
-### Manual Testing with curl
+### Pruebas Manuales con curl
 
-**1. User Registration:**
+**1. Registro de Usuario:**
 
 ```bash
 curl -X POST http://localhost:8080/api/auth/register \
@@ -299,7 +294,7 @@ curl -X POST http://localhost:8080/api/auth/register \
   }'
 ```
 
-**2. User Login:**
+**2. Inicio de Sesión de Usuario:**
 
 ```bash
 curl -X POST http://localhost:8080/api/auth/login \
@@ -310,64 +305,64 @@ curl -X POST http://localhost:8080/api/auth/login \
   }'
 ```
 
-**3. Test Protected Endpoints (replace TOKEN with JWT from login):**
+**3. Probar Endpoints Protegidos (reemplazar TOKEN con JWT del login):**
 
 ```bash
-# Get all users (Admin only)
+# Obtener todos los usuarios (Solo Admin)
 curl -H "Authorization: Bearer TOKEN" http://localhost:8080/api/users
 
-# Get all students
+# Obtener todos los estudiantes
 curl -H "Authorization: Bearer TOKEN" http://localhost:8080/api/students
 
-# Get all courses
+# Obtener todos los cursos
 curl -H "Authorization: Bearer TOKEN" http://localhost:8080/api/courses
 
-# Get all teachers
+# Obtener todos los profesores
 curl -H "Authorization: Bearer TOKEN" http://localhost:8080/api/teachers
 
-# Get all enrollments
+# Obtener todas las inscripciones
 curl -H "Authorization: Bearer TOKEN" http://localhost:8080/api/enrollments
 
-# Get all grades
+# Obtener todas las calificaciones
 curl -H "Authorization: Bearer TOKEN" http://localhost:8080/api/grades
 ```
 
-### Postman Testing
+### Pruebas con Postman
 
-📋 **Complete Postman Guide**: See [POSTMAN_TESTING_GUIDE.md](POSTMAN_TESTING_GUIDE.md) for detailed step-by-step instructions.
+📋 **Guía Completa de Postman**: Ver [POSTMAN_TESTING_GUIDE.md](POSTMAN_TESTING_GUIDE.md) para instrucciones detalladas paso a paso.
 
-**Quick Setup:**
+**Configuración Rápida:**
 
-1. Set environment variables: `baseUrl` = `http://localhost:8080/api`
-2. Start with authentication endpoints to get JWT token
-3. Use token for all subsequent requests
+1. Establecer variables de entorno: `baseUrl` = `http://localhost:8080/api`
+2. Comenzar con endpoints de autenticación para obtener token JWT
+3. Usar token para todas las solicitudes subsecuentes
 
-### API Documentation
+### Documentación de API
 
-Access the interactive API documentation:
+Acceder a la documentación interactiva de la API:
 
-- **Swagger UI**: http://localhost:8080/api/swagger-ui.html ✅ Working
+- **Swagger UI**: http://localhost:8080/api/swagger-ui.html ✅ Funcionando
 - **OpenAPI JSON**: http://localhost:8080/api/v3/api-docs
 
-### Endpoint Status Report
+### Reporte de Estado de Endpoints
 
-| Endpoint         | Method | Status     | Description                 |
-| ---------------- | ------ | ---------- | --------------------------- |
-| `/auth/register` | POST   | ✅ Working | User registration           |
-| `/auth/login`    | POST   | ✅ Working | User authentication         |
-| `/users`         | GET    | ✅ Working | List all users (Admin only) |
-| `/students`      | GET    | ✅ Working | List all students           |
-| `/students`      | POST   | ✅ Working | Register new student        |
-| `/teachers`      | GET    | ✅ Working | List all teachers           |
-| `/teachers`      | POST   | ✅ Working | Register new teacher        |
-| `/courses`       | GET    | ✅ Working | List all courses            |
-| `/courses`       | POST   | ✅ Working | Create new course           |
-| `/enrollments`   | GET    | ✅ Working | List all enrollments        |
-| `/enrollments`   | POST   | ✅ Working | Enroll student in course    |
-| `/grades`        | GET    | ✅ Working | List all grades             |
-| `/grades`        | POST   | ✅ Working | Record new grade            |
+| Endpoint         | Método | Estado         | Descripción                            |
+| ---------------- | ------ | -------------- | -------------------------------------- |
+| `/auth/register` | POST   | ✅ Funcionando | Registro de usuario                    |
+| `/auth/login`    | POST   | ✅ Funcionando | Autenticación de usuario               |
+| `/users`         | GET    | ✅ Funcionando | Listar todos los usuarios (Solo Admin) |
+| `/students`      | GET    | ✅ Funcionando | Listar todos los estudiantes           |
+| `/students`      | POST   | ✅ Funcionando | Registrar nuevo estudiante             |
+| `/teachers`      | GET    | ✅ Funcionando | Listar todos los profesores            |
+| `/teachers`      | POST   | ✅ Funcionando | Registrar nuevo profesor               |
+| `/courses`       | GET    | ✅ Funcionando | Listar todos los cursos                |
+| `/courses`       | POST   | ✅ Funcionando | Crear nuevo curso                      |
+| `/enrollments`   | GET    | ✅ Funcionando | Listar todas las inscripciones         |
+| `/enrollments`   | POST   | ✅ Funcionando | Inscribir estudiante en curso          |
+| `/grades`        | GET    | ✅ Funcionando | Listar todas las calificaciones        |
+| `/grades`        | POST   | ✅ Funcionando | Registrar nueva calificación           |
 
-**All major endpoints are fully functional!** 🎉
+**¡Todos los endpoints principales están completamente funcionales!** 🎉
 
 ## 📊 Database Schema
 
@@ -438,91 +433,95 @@ Para soporte y preguntas:
 - Documentation: [API Docs](http://localhost:8080/api/swagger-ui.html)
 - Issues: [GitHub Issues](https://github.com/your-repo/issues)
 
-## 🚨 Troubleshooting
+## 🚨 Solución de Problemas
 
-### Common Issues
+### Problemas Comunes
 
-**Application won't start:**
+**La aplicación no inicia:**
 
-- Ensure MySQL is running and accessible
-- Verify database credentials in `application-mysql.yml`
-- Check if port 8080 is available
-- Run: `mvn clean package -DskipTests` to rebuild
+- Asegurar que MySQL esté ejecutándose y accesible
+- Verificar credenciales de base de datos en `application-mysql.yml`
+- Verificar si el puerto 8080 está disponible
+- Ejecutar: `mvn clean package -DskipTests` para reconstruir
 
-**Database connection errors:**
+**Errores de conexión a base de datos:**
 
-- Verify MySQL user `educagestor_user1` exists with correct password
-- Ensure database `educagestor_db` is created
-- Check MySQL is running on port 3306
-- Test connection: `mysql -u educagestor_user1 -p educagestor_db`
+- Verificar que el usuario MySQL `educagestor_user1` existe con la contraseña correcta
+- Asegurar que la base de datos `educagestor_db` esté creada
+- Verificar que MySQL esté ejecutándose en el puerto 3306
+- Probar conexión: `mysql -u educagestor_user1 -p educagestor_db`
 
-**Swagger UI not loading:**
+**Swagger UI no carga:**
 
-- ✅ **RESOLVED**: Swagger UI is now fully functional
-- Access at: http://localhost:8080/api/swagger-ui.html
-- API docs at: http://localhost:8080/api/v3/api-docs
-- If issues persist, verify application started successfully (look for "Started EducaGestorApiApplication")
-- Ensure no firewall blocking port 8080
-- Verify with: `netstat -ano | findstr :8080`
+- ✅ **RESUELTO**: Swagger UI ahora está completamente funcional
+- Acceder en: http://localhost:8080/api/swagger-ui.html
+- Documentos API en: http://localhost:8080/api/v3/api-docs
+- Si persisten problemas, verificar que la aplicación inició exitosamente (buscar "Started EducaGestorApiApplication")
+- Asegurar que no hay firewall bloqueando el puerto 8080
+- Verificar con: `netstat -ano | findstr :8080`
 
-**API endpoints returning 500 errors:**
+**Endpoints de API devolviendo errores 500:**
 
-- ✅ **RESOLVED**: All major endpoints now working
-- If issues persist, check application logs in `logs/educagestor-api.log`
-- Restart application: `taskkill /F /IM java.exe` then restart
+- ✅ **RESUELTO**: Todos los endpoints principales ahora funcionan
+- Si persisten problemas, verificar logs de aplicación en `logs/educagestor-api.log`
+- Reiniciar aplicación: `taskkill /F /IM java.exe` luego reiniciar
 
-**Authentication issues:**
+**Problemas de autenticación:**
 
-- Use correct test credentials: `testadmin` / `admin123`
-- Ensure JWT token is included in Authorization header
-- Token format: `Bearer <your-jwt-token>`
-- Tokens expire after 24 hours - login again if needed
+- Usar credenciales de prueba correctas: `testadmin` / `admin123`
+- Asegurar que el token JWT esté incluido en el header Authorization
+- Formato de token: `Bearer <your-jwt-token>`
+- Los tokens expiran después de 24 horas - iniciar sesión nuevamente si es necesario
 
-### Known Working Configuration
+### Configuración Conocida que Funciona
 
-✅ **Verified Working Setup:**
+✅ **Configuración Verificada y Funcionando:**
 
-- **OS**: Windows 10/11
+- **SO**: Windows 10/11
 - **Java**: OpenJDK 17
 - **MySQL**: 8.0+
 - **Maven**: 3.6+
-- **Port**: 8080 (application), 3306 (MySQL)
-- **Database**: `educagestor_db`
-- **User**: `educagestor_user1` / `SecurePass123!`
+- **Puerto**: 8080 (aplicación), 3306 (MySQL)
+- **Base de Datos**: `educagestor_db`
+- **Usuario**: `educagestor_user1` / `educagestor_pass`
 
-## 🔄 Version History
+## 🔄 Historial de Versiones
 
-- **v1.0.1** - ✅ **Current Stable Release** (Latest Update)
+- **v1.0.1** - ✅ **Versión Estable Actual** (Última Actualización)
 
-  - ✅ **FIXED**: Swagger UI fully functional and accessible
-  - ✅ **FIXED**: OpenAPI documentation endpoint working
-  - ✅ **IMPROVED**: Database configuration and connection stability
-  - ✅ **VERIFIED**: All major API endpoints tested and working
-  - ✅ **ENHANCED**: Error handling and logging improvements
-  - ✅ **UPDATED**: Configuration for MySQL with proper path mapping
+  - ✅ **CORREGIDO**: Swagger UI completamente funcional y accesible
+  - ✅ **CORREGIDO**: Endpoint de documentación OpenAPI funcionando
+  - ✅ **MEJORADO**: Configuración de base de datos y estabilidad de conexión
+  - ✅ **VERIFICADO**: Todos los endpoints principales de API probados y funcionando
+  - ✅ **MEJORADO**: Manejo de errores y mejoras de logging
+  - ✅ **ACTUALIZADO**: Configuración para MySQL con mapeo de rutas apropiado
 
-- **v1.0.0** - Initial release with core functionality
-  - User authentication and authorization
-  - Complete CRUD operations for all entities
-  - JWT token management
-  - Swagger documentation
-  - Comprehensive error handling
+- **v1.0.0** - Lanzamiento inicial con funcionalidad principal
+  - Autenticación y autorización de usuarios
+  - Operaciones CRUD completas para todas las entidades
+  - Gestión de tokens JWT
+  - Documentación Swagger
+  - Manejo comprehensivo de errores
 
-## 🎉 Latest Updates (v1.0.1)
+## 🎉 Últimas Actualizaciones (v1.0.1)
 
-**✅ Major Issues Resolved:**
+**✅ Problemas Principales Resueltos:**
 
-1. **Swagger UI Configuration**: Fixed SpringDoc path configuration from `/api-docs` to `/v3/api-docs`
-2. **Database Connection**: Stabilized MySQL connection with proper user credentials
-3. **API Documentation**: Complete OpenAPI 3.0 specification now available
-4. **Error Handling**: Improved error logging and debugging capabilities
-5. **Configuration Management**: Streamlined application profiles for different environments
+1. **Configuración Swagger UI**: Corregida configuración de ruta SpringDoc de `/api-docs` a `/v3/api-docs`
+2. **Conexión de Base de Datos**: Estabilizada conexión MySQL con credenciales de usuario apropiadas
+3. **Documentación API**: Especificación completa OpenAPI 3.0 ahora disponible
+4. **Manejo de Errores**: Mejoradas capacidades de logging de errores y depuración
+5. **Gestión de Configuración**: Perfiles de aplicación optimizados para diferentes entornos
 
-**🚀 Current Status:**
+**🚀 Estado Actual:**
 
-- ✅ Application starts successfully
-- ✅ Database connection established
-- ✅ Swagger UI fully functional
-- ✅ All major endpoints tested and working
-- ✅ JWT authentication working
-- ✅ Role-based access control implemented
+- ✅ Aplicación inicia exitosamente
+- ✅ Conexión de base de datos establecida
+- ✅ Swagger UI completamente funcional
+- ✅ Todos los endpoints principales probados y funcionando
+- ✅ Autenticación JWT funcionando
+- ✅ Control de acceso basado en roles implementado
+
+---
+
+**¡Tu API EducaGestor360 está lista para usar en producción!** 🚀
