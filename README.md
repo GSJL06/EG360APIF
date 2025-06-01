@@ -2,7 +2,7 @@
 
 Plataforma Integral de Gestión Educativa API construida con Spring Boot, MySQL y autenticación JWT.
 
-**✅ Versión Actual: v1.0.1 - Completamente Funcional con Swagger UI Operativo**
+**✅ Versión Actual: v1.0.2 - Completamente Funcional con Docker y Swagger UI Operativo**
 
 ## 🚀 Características
 
@@ -22,14 +22,22 @@ Plataforma Integral de Gestión Educativa API construida con Spring Boot, MySQL 
 - **Base de Datos**: MySQL 8.0+ (Principal), SQL Server (Alternativo)
 - **Seguridad**: Spring Security, JWT (JSON Web Tokens)
 - **Documentación**: Swagger/OpenAPI 3 ✅ **FUNCIONANDO**
+- **Containerización**: Docker & Docker Compose ✅ **FUNCIONANDO**
 - **Herramienta de Construcción**: Maven
 - **Testing**: JUnit 5, Spring Boot Test
 
 ## 📋 Prerrequisitos
 
+### Para Ejecución Local:
+
 - Java 17 o superior
 - MySQL 8.0 o superior
 - Maven 3.6 o superior
+
+### Para Ejecución con Docker:
+
+- Docker Desktop (Windows/Mac) o Docker Engine (Linux)
+- Docker Compose v2.0 o superior
 
 ## 🔧 Instalación y Configuración
 
@@ -97,11 +105,20 @@ mvn clean install
 mvn spring-boot:run -Dspring.profiles.active=mysql
 ```
 
-**Usando Docker:**
+**Usando Docker (Recomendado para Desarrollo):**
 
 ```bash
 # Construir y ejecutar con Docker Compose
 docker-compose up --build
+
+# Ejecutar en segundo plano
+docker-compose up -d --build
+
+# Ver logs en tiempo real
+docker-compose logs -f educagestor-api
+
+# Detener contenedores
+docker-compose down
 ```
 
 **Para Desarrollo:**
@@ -113,7 +130,117 @@ mvn spring-boot:run -Dspring.profiles.active=mysql
 
 La API estará disponible en `http://localhost:8080/api`
 
-## 📚 Documentación API
+## 🐳 Configuración Docker
+
+### Arquitectura Docker
+
+La aplicación incluye configuración completa de Docker con:
+
+- **Dockerfile multi-stage** para optimización de imagen
+- **Docker Compose** para orquestación de servicios
+- **Configuración de red** para comunicación entre contenedores
+- **Health checks** para monitoreo de estado
+- **Volúmenes persistentes** para datos
+
+### Variables de Entorno Docker
+
+El contenedor utiliza las siguientes variables de entorno:
+
+```yaml
+environment:
+  SPRING_PROFILES_ACTIVE: docker,mysql
+  DB_HOST: host.docker.internal # Para conectar a MySQL en host
+  DB_PORT: 3306
+  DB_NAME: educagestor_db
+  DB_USERNAME: educagestor_user1
+  DB_PASSWORD: educagestor_pass
+  JWT_SECRET: mySecretKey123456789012345678901234567890
+```
+
+### URLs Docker
+
+Cuando la aplicación corre en Docker, las URLs son:
+
+- **API Base**: http://localhost:8080/api
+- **Swagger UI**: http://localhost:8080/api/swagger-ui.html ✅ **FUNCIONANDO**
+- **API Docs**: http://localhost:8080/api/v3/api-docs
+- **Health Check**: http://localhost:8080/api/actuator/health
+
+### Comandos Docker Útiles
+
+```bash
+# Ver estado de contenedores
+docker-compose ps
+
+# Ver logs específicos
+docker-compose logs educagestor-api
+
+# Reconstruir imagen sin cache
+docker-compose build --no-cache educagestor-api
+
+# Ejecutar comando dentro del contenedor
+docker-compose exec educagestor-api bash
+
+# Limpiar recursos Docker
+docker-compose down --volumes --remove-orphans
+```
+
+## � Configuración Docker
+
+### Arquitectura Docker
+
+La aplicación incluye configuración completa de Docker con:
+
+- **Dockerfile multi-stage** para optimización de imagen
+- **Docker Compose** para orquestación de servicios
+- **Configuración de red** para comunicación entre contenedores
+- **Health checks** para monitoreo de estado
+- **Volúmenes persistentes** para datos
+
+### Variables de Entorno Docker
+
+El contenedor utiliza las siguientes variables de entorno:
+
+```yaml
+environment:
+  SPRING_PROFILES_ACTIVE: docker,mysql
+  DB_HOST: host.docker.internal # Para conectar a MySQL en host
+  DB_PORT: 3306
+  DB_NAME: educagestor_db
+  DB_USERNAME: educagestor_user1
+  DB_PASSWORD: educagestor_pass
+  JWT_SECRET: mySecretKey123456789012345678901234567890
+```
+
+### URLs Docker
+
+Cuando la aplicación corre en Docker, las URLs son:
+
+- **API Base**: http://localhost:8080/api
+- **Swagger UI**: http://localhost:8080/api/swagger-ui.html ✅ **FUNCIONANDO**
+- **API Docs**: http://localhost:8080/api/v3/api-docs
+- **Health Check**: http://localhost:8080/api/actuator/health
+
+### Comandos Docker Útiles
+
+```bash
+# Ver estado de contenedores
+docker-compose ps
+
+# Ver logs específicos
+docker-compose logs educagestor-api
+
+# Reconstruir imagen sin cache
+docker-compose build --no-cache educagestor-api
+
+# Ejecutar comando dentro del contenedor
+docker-compose exec educagestor-api bash
+
+# Limpiar recursos Docker
+docker-compose down --volumes --remove-orphans
+```
+
+## �📚 Documentación API
 
 ✅ **Documentación Swagger Completamente Funcional**
 
@@ -487,7 +614,16 @@ Para soporte y preguntas:
 
 ## 🔄 Historial de Versiones
 
-- **v1.0.1** - ✅ **Versión Estable Actual** (Última Actualización)
+- **v1.0.2** - ✅ **Versión Estable Actual** (Última Actualización)
+
+  - ✅ **AGREGADO**: Soporte completo para Docker y Docker Compose
+  - ✅ **CORREGIDO**: Context-path configurado correctamente para Docker
+  - ✅ **MEJORADO**: Configuración multi-entorno (local, docker, mysql, sqlserver)
+  - ✅ **AGREGADO**: Health checks y monitoreo de contenedores
+  - ✅ **DOCUMENTADO**: Guía completa de Docker y comandos útiles
+  - ✅ **VERIFICADO**: Swagger UI funcionando en todos los entornos
+
+- **v1.0.1** - Versión Estable Anterior
 
   - ✅ **CORREGIDO**: Swagger UI completamente funcional y accesible
   - ✅ **CORREGIDO**: Endpoint de documentación OpenAPI funcionando
@@ -503,24 +639,34 @@ Para soporte y preguntas:
   - Documentación Swagger
   - Manejo comprehensivo de errores
 
-## 🎉 Últimas Actualizaciones (v1.0.1)
+## 🎉 Últimas Actualizaciones (v1.0.2)
 
-**✅ Problemas Principales Resueltos:**
+**✅ Nuevas Características Agregadas:**
 
-1. **Configuración Swagger UI**: Corregida configuración de ruta SpringDoc de `/api-docs` a `/v3/api-docs`
-2. **Conexión de Base de Datos**: Estabilizada conexión MySQL con credenciales de usuario apropiadas
-3. **Documentación API**: Especificación completa OpenAPI 3.0 ahora disponible
-4. **Manejo de Errores**: Mejoradas capacidades de logging de errores y depuración
-5. **Gestión de Configuración**: Perfiles de aplicación optimizados para diferentes entornos
+1. **Soporte Docker Completo**: Configuración completa de Docker y Docker Compose
+2. **Context-Path Docker**: Corregido context-path `/api` para entorno Docker
+3. **Configuración Multi-Entorno**: Perfiles optimizados para local, docker, mysql, sqlserver
+4. **Health Checks**: Monitoreo automático de estado de contenedores
+5. **Documentación Docker**: Guía completa con comandos útiles y troubleshooting
+
+**🐳 Características Docker:**
+
+- ✅ Dockerfile multi-stage optimizado
+- ✅ Docker Compose con networking
+- ✅ Variables de entorno configurables
+- ✅ Health checks automáticos
+- ✅ Volúmenes persistentes
+- ✅ Logs centralizados
 
 **🚀 Estado Actual:**
 
-- ✅ Aplicación inicia exitosamente
-- ✅ Conexión de base de datos establecida
-- ✅ Swagger UI completamente funcional
-- ✅ Todos los endpoints principales probados y funcionando
-- ✅ Autenticación JWT funcionando
+- ✅ Aplicación funciona en local y Docker
+- ✅ Swagger UI operativo en ambos entornos
+- ✅ Base de datos MySQL conectada
+- ✅ Todos los endpoints probados y funcionando
+- ✅ Autenticación JWT completamente funcional
 - ✅ Control de acceso basado en roles implementado
+- ✅ Docker deployment listo para producción
 
 ---
 

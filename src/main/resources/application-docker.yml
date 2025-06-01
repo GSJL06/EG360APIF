@@ -1,5 +1,7 @@
 server:
   port: 8080
+  servlet:
+    context-path: /api
 
 spring:
   application:
@@ -17,7 +19,7 @@ spring:
     # ddl-auto and defer-datasource-initialization will be inherited from the active profile in application.yml
 
 # sql.init.mode will be inherited from the active profile in application.yml
-      
+
 # JWT Configuration
 jwt:
   secret: ${JWT_SECRET:mySecretKey123456789012345678901234567890} # Ensure this is set as an environment variable
