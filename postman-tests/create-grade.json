@@ -1,0 +1,11 @@
+{
+  "studentId": 1,
+  "courseId": 1,
+  "assignmentName": "Midterm Exam",
+  "gradeType": "EXAM",
+  "gradeValue": 85.5,
+  "maxPoints": 100.0,
+  "gradeDate": "2025-03-15",
+  "weight": 0.3,
+  "comments": "Good understanding of concepts, minor errors in implementation"
+}

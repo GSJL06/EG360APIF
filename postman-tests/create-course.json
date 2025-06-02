@@ -1,0 +1,13 @@
+{
+  "courseCode": "CS101",
+  "courseName": "Introduction to Computer Science",
+  "description": "Basic concepts of computer science and programming",
+  "credits": 3,
+  "startDate": "2025-01-15",
+  "endDate": "2025-05-15",
+  "maxStudents": 30,
+  "schedule": "Monday, Wednesday, Friday 10:00-11:30",
+  "classroom": "Room 101",
+  "teacherId": 1,
+  "courseStatus": "ACTIVE"
+}

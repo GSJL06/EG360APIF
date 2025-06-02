@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # EducaGestor360 API
@@ -8,19 +8,16 @@ services:
     container_name: educagestor-api
     environment:
       SPRING_PROFILES_ACTIVE: docker,mysql # Default to mysql for docker, can be changed
-      # For connecting to DB on host from Docker: use host.docker.internal
-      # For MySQL running on host:
-      DB_HOST: host.docker.internal # For Docker Desktop (Windows/Mac)
-      # For Linux, use `docker network inspect bridge` to find gateway IP or add --add-host=host.docker.internal:host-gateway to docker run
+      # For connecting to DB on host from Docker: use localhost with network_mode: host
+      DB_HOST: localhost # Using localhost with host network mode
       DB_PORT: 3306 # Default MySQL port
       DB_NAME: educagestor_db # Or your chosen DB name
-      DB_USERNAME: educagestor_user # Or your chosen DB user
+      DB_USERNAME: educagestor_user1 # Or your chosen DB user
       DB_PASSWORD: educagestor_pass # Or your chosen DB password
       JWT_SECRET: mySecretKey123456789012345678901234567890
     ports:
       - "8080:8080"
-    networks:
-      - educagestor-network
+    network_mode: host # Use host network to access localhost MySQL directly
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/api/actuator/health"]

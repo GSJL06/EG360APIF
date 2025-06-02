@@ -1,0 +1,17 @@
+{
+  "employeeId": "T001",
+  "user": {
+    "username": "prof_smith",
+    "email": "prof.smith@educagestor360.com",
+    "firstName": "John",
+    "lastName": "Smith",
+    "phoneNumber": "+1234567891"
+  },
+  "department": "Computer Science",
+  "specialization": "Software Engineering",
+  "qualifications": "PhD in Computer Science, 10 years experience",
+  "hireDate": "2020-01-15",
+  "officeLocation": "Building A, Room 201",
+  "officeHours": "Monday-Friday 2:00-4:00 PM",
+  "employmentStatus": "ACTIVE"
+}

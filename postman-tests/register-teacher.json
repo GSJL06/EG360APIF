@@ -1,0 +1,8 @@
+{
+  "username": "teacher1",
+  "email": "teacher1@educagestor360.com",
+  "password": "teacher123",
+  "firstName": "John",
+  "lastName": "Smith",
+  "roles": ["TEACHER"]
+}

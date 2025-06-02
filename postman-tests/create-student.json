@@ -1,0 +1,16 @@
+{
+  "studentId": "S001",
+  "user": {
+    "username": "alice_brown",
+    "email": "alice.brown@educagestor360.com",
+    "firstName": "Alice",
+    "lastName": "Brown",
+    "phoneNumber": "+1234567893"
+  },
+  "dateOfBirth": "2000-05-15",
+  "address": "123 Main St, City, State 12345",
+  "emergencyContact": "Mary Brown",
+  "emergencyPhone": "+1234567899",
+  "enrollmentDate": "2024-09-01",
+  "academicStatus": "ACTIVE"
+}

@@ -31,13 +31,21 @@ Plataforma Integral de Gestión Educativa API construida con Spring Boot, MySQL 
 ### Para Ejecución Local:
 
 - Java 17 o superior
-- MySQL 8.0 o superior
 - Maven 3.6 o superior
+- **Base de Datos** (una de las siguientes):
+  - **H2** (recomendado para desarrollo - incluido)
+  - **MySQL 8.0+** (para producción)
+  - **PostgreSQL 12+** (alternativa)
 
 ### Para Ejecución con Docker:
 
 - Docker Desktop (Windows/Mac) o Docker Engine (Linux)
 - Docker Compose v2.0 o superior
+
+### Para Pruebas de API:
+
+- **Postman** (recomendado)
+- **curl** (incluido en la mayoría de sistemas)
 
 ## 🔧 Instalación y Configuración
 
@@ -50,7 +58,32 @@ cd educagestor-api
 
 ### 2. Configuración de Base de Datos
 
-#### Para MySQL:
+#### 🚀 Para Desarrollo Rápido (H2 - Recomendado):
+
+**¡Inicio más rápido sin configuración de base de datos!**
+
+```bash
+# Construir la aplicación
+mvn clean package -DskipTests
+
+# Ejecutar con H2 (base de datos en memoria)
+java -jar target/educagestor-api-1.0.0.jar --spring.profiles.active=h2
+```
+
+**Características de H2:**
+
+- ✅ **Sin configuración**: No requiere instalación de base de datos
+- ✅ **Datos de prueba**: Se crean automáticamente usuarios y datos de ejemplo
+- ✅ **Consola web**: Disponible en http://localhost:8080/api/h2-console
+- ✅ **Ideal para desarrollo**: Perfecto para pruebas y desarrollo
+
+**URLs con H2:**
+
+- **API**: http://localhost:8080/api
+- **Swagger UI**: http://localhost:8080/api/swagger-ui/index.html
+- **H2 Console**: http://localhost:8080/api/h2-console
+
+#### Para MySQL (Producción):
 
 ```sql
 -- Crear base de datos
@@ -86,7 +119,17 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
 ```
 
-#### Inicio Rápido (Recomendado):
+#### 🚀 Inicio Rápido (Recomendado - H2):
+
+```bash
+# Construir la aplicación
+mvn clean package -DskipTests
+
+# Ejecutar con H2 (sin configuración de BD)
+java -jar target/educagestor-api-1.0.0.jar --spring.profiles.active=h2
+```
+
+#### Inicio con MySQL:
 
 ```bash
 # Construir la aplicación
