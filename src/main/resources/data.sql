@@ -1,9 +1,11 @@
 -- Initial data for EducaGestor360 API
 -- This script creates sample data for testing and development
+-- Compatible with H2 Database
 
 -- Insert sample admin user
 -- Password: admin123 (BCrypt encoded)
-INSERT IGNORE INTO users (username, email, password, first_name, last_name, phone_number, active, created_at, updated_at)
+MERGE INTO users (username, email, password, first_name, last_name, phone_number, active, created_at, updated_at)
+KEY(username)
 VALUES
 ('admin', 'admin@educagestor360.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'System', 'Administrator', '+1234567890', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('teacher1', 'teacher1@educagestor360.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'John', 'Smith', '+1234567891', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -13,17 +15,21 @@ VALUES
 ('student3', 'student3@educagestor360.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'Carol', 'Davis', '+1234567895', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insert user roles
-INSERT IGNORE INTO user_roles (user_id, role)
+MERGE INTO user_roles (user_id, role)
+KEY(user_id, role)
 SELECT u.id, 'ADMIN' FROM users u WHERE u.username = 'admin';
 
-INSERT IGNORE INTO user_roles (user_id, role)
+MERGE INTO user_roles (user_id, role)
+KEY(user_id, role)
 SELECT u.id, 'TEACHER' FROM users u WHERE u.username IN ('teacher1', 'teacher2');
 
-INSERT IGNORE INTO user_roles (user_id, role)
+MERGE INTO user_roles (user_id, role)
+KEY(user_id, role)
 SELECT u.id, 'STUDENT' FROM users u WHERE u.username IN ('student1', 'student2', 'student3');
 
 -- Insert sample teachers
-INSERT IGNORE INTO teachers (employee_id, user_id, department, specialization, qualifications, hire_date, office_location, office_hours, employment_status, created_at, updated_at)
+MERGE INTO teachers (employee_id, user_id, department, specialization, qualifications, hire_date, office_location, office_hours, employment_status, created_at, updated_at)
+KEY(employee_id)
 SELECT
     'EMP001',
     u.id,
@@ -38,7 +44,8 @@ SELECT
     CURRENT_TIMESTAMP
 FROM users u WHERE u.username = 'teacher1';
 
-INSERT IGNORE INTO teachers (employee_id, user_id, department, specialization, qualifications, hire_date, office_location, office_hours, employment_status, created_at, updated_at)
+MERGE INTO teachers (employee_id, user_id, department, specialization, qualifications, hire_date, office_location, office_hours, employment_status, created_at, updated_at)
+KEY(employee_id)
 SELECT
     'EMP002',
     u.id,
@@ -54,7 +61,8 @@ SELECT
 FROM users u WHERE u.username = 'teacher2';
 
 -- Insert sample students
-INSERT IGNORE INTO students (student_id, user_id, date_of_birth, address, emergency_contact, emergency_phone, enrollment_date, academic_status, created_at, updated_at)
+MERGE INTO students (student_id, user_id, date_of_birth, address, emergency_contact, emergency_phone, enrollment_date, academic_status, created_at, updated_at)
+KEY(student_id)
 SELECT
     'STU001',
     u.id,
@@ -68,7 +76,8 @@ SELECT
     CURRENT_TIMESTAMP
 FROM users u WHERE u.username = 'student1';
 
-INSERT IGNORE INTO students (student_id, user_id, date_of_birth, address, emergency_contact, emergency_phone, enrollment_date, academic_status, created_at, updated_at)
+MERGE INTO students (student_id, user_id, date_of_birth, address, emergency_contact, emergency_phone, enrollment_date, academic_status, created_at, updated_at)
+KEY(student_id)
 SELECT
     'STU002',
     u.id,
@@ -82,7 +91,8 @@ SELECT
     CURRENT_TIMESTAMP
 FROM users u WHERE u.username = 'student2';
 
-INSERT IGNORE INTO students (student_id, user_id, date_of_birth, address, emergency_contact, emergency_phone, enrollment_date, academic_status, created_at, updated_at)
+MERGE INTO students (student_id, user_id, date_of_birth, address, emergency_contact, emergency_phone, enrollment_date, academic_status, created_at, updated_at)
+KEY(student_id)
 SELECT
     'STU003',
     u.id,
@@ -97,7 +107,8 @@ SELECT
 FROM users u WHERE u.username = 'student3';
 
 -- Insert sample courses
-INSERT IGNORE INTO courses (course_code, course_name, description, credits, teacher_id, start_date, end_date, schedule, classroom, max_students, course_status, created_at, updated_at)
+MERGE INTO courses (course_code, course_name, description, credits, teacher_id, start_date, end_date, schedule, classroom, max_students, course_status, created_at, updated_at)
+KEY(course_code)
 SELECT
     'CS101',
     'Introduction to Programming',
@@ -114,7 +125,8 @@ SELECT
     CURRENT_TIMESTAMP
 FROM teachers t WHERE t.employee_id = 'EMP001';
 
-INSERT IGNORE INTO courses (course_code, course_name, description, credits, teacher_id, start_date, end_date, schedule, classroom, max_students, course_status, created_at, updated_at)
+MERGE INTO courses (course_code, course_name, description, credits, teacher_id, start_date, end_date, schedule, classroom, max_students, course_status, created_at, updated_at)
+KEY(course_code)
 SELECT
     'MATH201',
     'Calculus I',
@@ -131,7 +143,8 @@ SELECT
     CURRENT_TIMESTAMP
 FROM teachers t WHERE t.employee_id = 'EMP002';
 
-INSERT IGNORE INTO courses (course_code, course_name, description, credits, teacher_id, start_date, end_date, schedule, classroom, max_students, course_status, created_at, updated_at)
+MERGE INTO courses (course_code, course_name, description, credits, teacher_id, start_date, end_date, schedule, classroom, max_students, course_status, created_at, updated_at)
+KEY(course_code)
 SELECT
     'CS201',
     'Data Structures',
@@ -149,7 +162,8 @@ SELECT
 FROM teachers t WHERE t.employee_id = 'EMP001';
 
 -- Insert sample enrollments
-INSERT IGNORE INTO enrollments (student_id, course_id, enrollment_date, enrollment_status, created_at, updated_at)
+MERGE INTO enrollments (student_id, course_id, enrollment_date, enrollment_status, created_at, updated_at)
+KEY(student_id, course_id)
 SELECT
     s.id,
     c.id,
@@ -160,7 +174,8 @@ SELECT
 FROM students s, courses c
 WHERE s.student_id = 'STU001' AND c.course_code = 'CS101';
 
-INSERT IGNORE INTO enrollments (student_id, course_id, enrollment_date, enrollment_status, created_at, updated_at)
+MERGE INTO enrollments (student_id, course_id, enrollment_date, enrollment_status, created_at, updated_at)
+KEY(student_id, course_id)
 SELECT
     s.id,
     c.id,
@@ -171,7 +186,8 @@ SELECT
 FROM students s, courses c
 WHERE s.student_id = 'STU001' AND c.course_code = 'MATH201';
 
-INSERT IGNORE INTO enrollments (student_id, course_id, enrollment_date, enrollment_status, created_at, updated_at)
+MERGE INTO enrollments (student_id, course_id, enrollment_date, enrollment_status, created_at, updated_at)
+KEY(student_id, course_id)
 SELECT
     s.id,
     c.id,
@@ -182,7 +198,8 @@ SELECT
 FROM students s, courses c
 WHERE s.student_id = 'STU002' AND c.course_code = 'CS101';
 
-INSERT IGNORE INTO enrollments (student_id, course_id, enrollment_date, enrollment_status, created_at, updated_at)
+MERGE INTO enrollments (student_id, course_id, enrollment_date, enrollment_status, created_at, updated_at)
+KEY(student_id, course_id)
 SELECT
     s.id,
     c.id,
